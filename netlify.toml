@@ -17,9 +17,4 @@
   to = "/admin/index.html"
   status = 200
 
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
-  status = 200
-
 # ローカル開発時: TINA_PUBLIC_IS_LOCAL=true を設定して yarn dev を実行
