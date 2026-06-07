@@ -1,0 +1,39 @@
+{
+  "name": "hpnwiki",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tinacms dev -c \"next dev\"",
+    "build": "tinacms build && next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tinacms/cli": "^1.12.6",
+    "@tinacms/datalayer": "^1.4.3",
+    "katex": "^0.16.9",
+    "mongodb": "^6.3.0",
+    "mongodb-level": "^0.0.4",
+    "next": "^14.2.3",
+    "next-auth": "^4.24.7",
+    "nextra": "^2.13.4",
+    "nextra-theme-docs": "^2.13.4",
+    "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "rehype-katex": "^7.0.0",
+    "remark-math": "^5.1.1",
+    "tinacms": "^1.6.7",
+    "tinacms-authjs": "^23.0.1",
+    "tinacms-gitprovider-github": "^4.1.10"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.6.0",
+    "@netlify/plugin-nextjs": "^5.3.3",
+    "@types/node": "^20.11.28",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "typescript": "^5.4.2"
+  }
+}

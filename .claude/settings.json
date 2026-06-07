@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn add *)",
+      "Bash(yarn info *)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/mongodb-level/package.json'\\).version\\)\")"
+    ]
+  }
+}

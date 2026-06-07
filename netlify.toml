@@ -1,0 +1,22 @@
+[build]
+  command = "yarn build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# TinaCMS 管理画面の /admin/* をリダイレクト（ビルド済み静的ファイルへ）
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+# ローカル開発時: TINA_PUBLIC_IS_LOCAL=true を設定して yarn dev を実行
