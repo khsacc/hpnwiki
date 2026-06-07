@@ -2,11 +2,22 @@ import { createDatabase, createLocalDatabase } from '@tinacms/datalayer'
 import { MongodbLevel } from 'mongodb-level'
 import { GitHubProvider } from 'tinacms-gitprovider-github'
 
-// TINA_PUBLIC_IS_LOCAL=true、または MONGO_URI が未設定の場合はローカルモード
 const isLocal =
   process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
 
-export default isLocal
+// MDX ファイルを書き込む際に date を現在時刻に自動更新する
+function withAutoDate<T extends { put: (...args: any[]) => Promise<any> }>(db: T): T {
+  const originalPut = db.put.bind(db)
+  ;(db as any).put = async (filepath: string, data: unknown, collectionName?: string) => {
+    if (typeof filepath === 'string' && filepath.endsWith('.mdx') && data !== null && typeof data === 'object') {
+      (data as Record<string, unknown>).date = new Date().toISOString()
+    }
+    return originalPut(filepath, data, collectionName)
+  }
+  return db
+}
+
+const db = isLocal
   ? createLocalDatabase()
   : createDatabase({
       gitProvider: new GitHubProvider({
@@ -21,3 +32,5 @@ export default isLocal
         mongoUri: process.env.MONGO_URI!,
       }),
     })
+
+export default withAutoDate(db)
