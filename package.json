@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tinacms/cli": "^1.12.6",
-    "@tinacms/datalayer": "^1.4.3",
+    "@tinacms/cli": "2.4.4",
+    "@tinacms/datalayer": "2.0.23",
     "katex": "^0.16.9",
     "mongodb": "^6.3.0",
     "mongodb-level": "^0.0.4",
@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0",
     "rehype-katex": "^7.0.0",
     "remark-math": "^5.1.1",
-    "tinacms": "2.10.1",
+    "tinacms": "3.9.1",
     "tinacms-authjs": "^23.0.1",
     "tinacms-gitprovider-github": "^4.1.10"
   },
