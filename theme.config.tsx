@@ -83,7 +83,7 @@ function AttachmentsSection() {
 const config: DocsThemeConfig = {
   logo: <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>Neutron @ Pressure Wiki</span>,
   project: {
-    link: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${process.env.NEXT_PUBLIC_GITHUB_REPO}`,
+    link: 'https://github.com/khsacc/hpnwiki',
   },
   navbar: {
     extraContent: (
@@ -101,7 +101,7 @@ const config: DocsThemeConfig = {
       </a>
     ),
   },
-  docsRepositoryBase: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${process.env.NEXT_PUBLIC_GITHUB_REPO}/blob/main`,
+  docsRepositoryBase: 'https://github.com/khsacc/hpnwiki/blob/main',
   footer: {
     text: (
       <span>
