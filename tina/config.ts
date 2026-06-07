@@ -10,7 +10,7 @@ const PAGE_DIRECTORIES = [
   { value: 'references',                         label: '参考文献' },
   { value: 'documents',                          label: 'ドキュメント' },
   { value: 'documents/datacorrection',           label: 'ドキュメント > データ補正' },
-  { value: 'att-data-resources',                 label: '減弱係数データリソース' },
+  { value: 'att-data-resources',                 label: 'Attenuation Coefficient データリソース' },
   { value: 'cellassembly',                       label: 'セルアセンブリ' },
   { value: 'sample-att',                         label: 'サンプル吸収補正' },
   { value: 'tof-profile-functions',              label: 'TOFプロファイル関数' },
