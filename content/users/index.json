@@ -4,7 +4,7 @@
       "username": "admin",
       "name": "Admin",
       "email": "admin@example.com",
-      "password": "$2a$10$REPLACE_WITH_BCRYPT_HASH_OF_YOUR_PASSWORD"
+      "password": "$2y$10$ZSYHgeWDpGZmO/UftkMjtOgY4/9psjsKu4C2pS7byujkFHVM/T8Ou"
     }
   ]
 }
