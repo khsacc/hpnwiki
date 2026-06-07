@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0",
     "rehype-katex": "^7.0.0",
     "remark-math": "^5.1.1",
-    "tinacms": "^1.6.7",
+    "tinacms": "2.10.1",
     "tinacms-authjs": "^23.0.1",
     "tinacms-gitprovider-github": "^4.1.10"
   },

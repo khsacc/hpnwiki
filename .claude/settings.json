@@ -25,7 +25,11 @@
       "Bash(/usr/bin/curl -sf \"http://localhost:3000/cellassembly/double-troid\")",
       "Bash(/usr/bin/grep -o '添付ファイル')",
       "Bash(/usr/bin/head -1)",
-      "Bash(/usr/bin/curl -sf \"http://localhost:3000/tof-profile-functions/bl11-pulse-shape\")"
+      "Bash(/usr/bin/curl -sf \"http://localhost:3000/tof-profile-functions/bl11-pulse-shape\")",
+      "Bash(npm show *)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\(v.filter\\(x=>x.startsWith\\('2.'\\)\\).slice\\(-10\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(npm info *)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\(v.slice\\(0,20\\).join\\('\\\\n'\\)\\)\")"
     ]
   }
 }
