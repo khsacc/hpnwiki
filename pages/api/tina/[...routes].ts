@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { TinaNodeBackend, LocalBackendAuthProvider } from '@tinacms/datalayer'
 import { AuthJsBackendAuthProvider, TinaAuthJSOptions } from 'tinacms-authjs'
-import database from '../../../tina/database'
+import databaseClient from '../../../tina/__generated__/databaseClient'
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
 
@@ -10,11 +10,11 @@ const tinaHandler = TinaNodeBackend({
     ? LocalBackendAuthProvider()
     : AuthJsBackendAuthProvider({
         authOptions: TinaAuthJSOptions({
-          databaseClient: database,
+          databaseClient,
           secret: process.env.NEXTAUTH_SECRET!,
         }),
       }),
-  databaseClient: database,
+  databaseClient,
 })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
