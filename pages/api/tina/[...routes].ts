@@ -29,7 +29,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body.variables.params.date = new Date().toISOString()
     }
   }
-  return tinaHandler(req, res)
+  try {
+    return await tinaHandler(req, res)
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    const stack = err instanceof Error ? err.stack : undefined
+    console.error('[tina] unhandled error:', err)
+    if (!res.headersSent) {
+      res.status(500).json({ tinaError: msg, stack })
+    }
+  }
 }
 
 export const config = {
