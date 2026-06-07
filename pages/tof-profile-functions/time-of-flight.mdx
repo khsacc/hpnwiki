@@ -1,0 +1,55 @@
+---
+title: Time of Flight（TOFの基礎）
+sidebarOrder: 1
+---
+
+## ピーク中心
+
+$T_{ph}$: ある相 $p$、あるヒストグラム $h$ における時間 $T$ という意味
+
+$$T_{ph} = \text{DIFC}\, d_p + \text{DIFA}\, d_p^2 + \text{ZERO}$$
+
+## $\Delta T$ の定義
+
+$$\Delta T = t - T_{ph}$$
+
+---
+
+## DIFC の導出
+
+DIFC は、TOF と $d$ との関係なので、de Broglie 波長の定義とBragg の式
+
+$$\lambda = \frac{ht}{mL} = 2d_p\sin\theta$$
+
+より
+
+$$t = \frac{mL}{h} \cdot 2\sin\theta \cdot d_p$$
+
+なので、[プランク定数](http://physics.nist.gov/cuu/Constants/index.html)
+
+$$h = 6.626\,069\,57(29) \times 10^{-34}\,\text{[J\,s (= kg\,m}^2\text{s}^{-1}\text{)]}$$
+
+および [中性子の質量](http://physics.nist.gov/cuu/Constants/index.html)
+
+$$m = 1.674\,927\,351(74) \times 10^{-27}\,\text{[kg]}$$
+
+より、TOF が [μsec] 単位で測定されるなら、
+
+- $L$ [m]: モデレータ－試料－検出器間の総飛行距離
+- $\theta$ [rad]: モデレータ－試料－検出器間の角度の 1/2
+
+として
+
+$$\text{DIFC} = \frac{mL}{h} \cdot 2\sin\theta = 505.5568\,L\sin\theta\,[\mu\text{s}/\text{\AA}]$$
+
+という関係が得られ、理想的には DIFA, ZERO はいずれも 0 になる。
+
+しかし、この式で仮定している以下のような理想的な条件と実際とは多少のずれがある。
+
+1. どの波長の中性子も $t=0$ でモデレータから出て行く
+2. モデレータ内部の発光点の大きさは無視できる
+3. 試料の大きさも無視できる
+
+さらに、モデレータ－試料－検出器の相対的な位置も設計からわずかにずれているため、実際には、Si などの標準試料のピークをもとに、検出器の位置の補正が行われる。このとき、上記1〜3のずれは、見かけ上検出器のずれとして、最終的なピーク中心は理想値のそれに近くなるように補正される。
+
+いずれにせよ、DIFC, DIFA, ZERO は標準試料の値をもとに決めた方が、もろもろのずれをキャンセルアウトしてくれるという点において、（標準試料のピークが観測される $d$ 値の範囲であれば）幾何学的な DIFC より、ベターだと思う。

@@ -1,0 +1,72 @@
+---
+title: TOFプロファイル関数
+sidebarOrder: 7
+---
+
+試料のピークプロファイルは
+
+$$a.\text{ モデレータのパルス形状} \otimes b.\text{ 試料のブロードニング} \otimes c.\text{ 入射・出射光学系の分散} \otimes d.\text{ 試料・検出器形状}$$
+
+の４つの関数（$\otimes$ はコンボリューション）で表現できると考えられます。
+
+現在ほとんどのリートベルト解析ソフトウェアで採用されているプロファイル関数は、これをaとb〜dの２種類に分け、
+
+- **a** を指数関数の組み合わせ
+- **b〜d** をガウス関数とローレンツ関数の組み合わせ
+
+として考えているようです。具体的には以下に示す５つの基本関数のコンボリューションあるいは線形結合でプロファイル関数は表現されています。
+
+---
+
+## 基本関数
+
+### Gaussian function: $G(t)$
+
+$$G(t)= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left[-\frac{t^2}{2\sigma^2}\right]$$
+
+### Lorentzian function: $L(t)$
+
+$$L(t)=\frac{\gamma}{2\pi} \frac{1}{\left[\left(\frac{\gamma}{2}\right)^2+t^2\right]}$$
+
+### Back to back exponential: $E(t)$
+
+$$E(t) = 2N\exp(\alpha t) \quad (t < 0)$$
+
+$$E(t) = 2N\exp(-\beta t) \quad (t > 0)$$
+
+ここで、
+
+$$N = \frac{\alpha\beta}{2(\alpha+\beta)}$$
+
+ヘビサイドの $\theta$ 関数を使うと、次のように一つの式で表現できる。
+
+$$E(t) = 2N\left\{\theta(-t)\exp(\alpha t) + \theta(t)\exp(-\beta t)\right\}$$
+
+ヘビサイドの $\theta$ 関数: $\theta(x<0) = 0$, $\theta(x>0) = 1$
+
+### Slowing down function: $S(t)$
+
+$$S(t)=\frac{\alpha}{2}(\alpha t)^2\exp(-\alpha t)$$
+
+### A mixing of a $\delta$-function and an exponential decay: $R(t)$
+
+$$R(t)=(1-R)\delta(t) + R\beta\theta(t)\exp(-\beta t)$$
+
+ここで、$\delta(t)$ はディラックの $\delta$ 関数、$\theta(t)$ はヘビサイドの $\theta$ 関数。
+
+つまり、$R(t)$ に何か別の関数 $F(t)$ をコンボリューションすると、
+
+$$F(t) \otimes R(t) = (1-R)F(t) + R \int_{-\infty}^{t} F(t')\beta\exp(-\beta(t-t'))\mathrm{d}t'$$
+
+となる。
+
+---
+
+## プロファイル関数の種類
+
+- [Time of Flight（TOF の基礎）](/tof-profile-functions/time-of-flight)
+- [Cole-Windsor 関数](/tof-profile-functions/cole-windsor)
+- [GSAS TOF1](/tof-profile-functions/gsas-tof1)
+- [GSAS TOF2](/tof-profile-functions/gsas-tof2)
+- [GSAS TOF3](/tof-profile-functions/gsas-tof3)
+- [BL11 パルス形状](/tof-profile-functions/bl11-pulse-shape)

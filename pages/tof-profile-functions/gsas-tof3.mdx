@@ -1,0 +1,99 @@
+---
+title: GSAS TOF Profile Function 3
+sidebarOrder: 5
+attachments:
+  - label: "TOF3.txt"
+    path: "/attachments/tof-profile-functions/gsas-tof3/TOF3.txt"
+---
+
+Mathematica で TOF3 プロファイル関数をシミュレーションするアプリを作ってみました。
+
+- [η可変ver.](http://www.eqchem.s.u-tokyo.ac.jp/member/kom/CDF_files/GSASTOF3/gsastof3_1.html)（G と L の比を自由に変えられる）
+- [η依存ver.](http://www.eqchem.s.u-tokyo.ac.jp/member/kom/CDF_files/GSASTOF3/gsastof3_2.html)（η が σ² と g から計算されるver.）
+
+（CDF player が必要。持っていない場合、リンク先でダウンロードを促されます。）
+
+![GSAS TOF3 CDF](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF3_CDF.png)
+
+各パラメータをスライドすると、プロファイルがどのように変化するかわかります。
+
+---
+
+## プロファイル関数の構成
+
+最終的なプロファイル関数 $H(\Delta T)$ は、４つのピーク関数の足し算になっています。
+
+- **HG1:** $G(\Delta T)$ と $a\exp(a\Delta T)$ のコンボリューション
+- **HG2:** $G(\Delta T)$ と $b\exp(-b\Delta T)$ のコンボリューション
+- **HL1:** $L(\Delta T)$ と $a\exp(a\Delta T)$ のコンボリューション
+- **HL2:** $L(\Delta T)$ と $b\exp(-b\Delta T)$ のコンボリューション
+
+それぞれよく似ているので、パラメータ間の相関はかなり強いです。
+
+---
+
+## ピーク中心とΔTの定義
+
+$T_{ph}$: ある相 $p$、あるヒストグラム $h$ における時間 $T$ という意味
+
+$$T_{ph} = \text{DIFC}\, d_p + \text{DIFA}\, d_p^2 + \text{ZERO}$$
+
+$$\Delta T = t - T_{ph}$$
+
+---
+
+## 基本関数のおさらい
+
+![GSAS TOF3-3](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF3-3.png)
+
+![GSAS TOF2 2 (from gsas-tof3)](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF2_2.PNG)
+
+![GSAS TOF2 3 (from gsas-tof3)](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF2_3.PNG)
+
+---
+
+## TOF3 の表式
+
+![GSAS TOF3-1](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF3-1.png)
+
+前半部分はほとんど TOF1 と同じですが、fit するパラメータのうち、$\alpha$ の定義がほんの少し変わっています。
+
+![GSAS TOF3-2](/wiki-images/tof-profile-functions/gsas-tof3/GSASTOF3-2.png)
+
+---
+
+## 特殊関数の補足
+
+ここで使われている特殊関数について以下に補足します。
+
+**erfc:** 相補誤差関数 (complementary error function)
+
+$$\mathrm{erfc}(x) = 1 - \mathrm{erf}(x)$$
+
+**$E_1$:** (1次の) 指数積分 (exponential integral)
+
+また、$\mathrm{Im}[e^p E_1(p)]$ は $e^p E_1(p)$ が複素数なので、その虚数部、という意味です。
+
+複素指数関数 $e^z$ [$z = x + iy$, $x$ と $y$ は実数] は、
+
+$$e^z = e^x(\cos y + i\sin y)$$
+
+と展開して計算できます。
+
+$\mathrm{erfc}(x)$ [$x$: 実数] は、Excel のワークシート関数にもあり、比較的簡単に使えますが、$E_1(z)$ [$z$: 複素数] はなかなか実装しているプログラムがありません。しかし、さすがに歴史のある FORTRAN では、いくつか実装例があります。
+
+---
+
+## 数値計算上の注意
+
+$\alpha$ の値が大きいと、$u$ の値が大きくなりすぎ、$\exp(u)$ は非常に大きな値になるか、オーバーフローします。一方、$\mathrm{erfc}(y)$ はほとんど 0 に近い値（あるいはアンダーフロー）になり丸め誤差の原因になります。
+
+そこで、スケーリング相補誤差関数 $\mathrm{erfcx}(x)$
+
+$$\mathrm{erfcx}(x) \equiv e^{x^2}\mathrm{erfc}(x)$$
+
+を使って、
+
+$$\exp(u)\,\mathrm{erfc}(y) = \exp(u - y^2)\,\mathrm{erfcx}(y)$$
+
+と置き換えると、この問題を回避できます。$\mathrm{erfcx}(x)$ は多くのプログラム言語でサポートされています。

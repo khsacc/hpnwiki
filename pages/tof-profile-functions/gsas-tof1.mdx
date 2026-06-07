@@ -1,0 +1,34 @@
+---
+title: GSAS TOF Profile Function 1
+sidebarOrder: 3
+---
+
+**参考文献:** Von Dreele, R.B., Jorgensen, J.D., and Windsor, C.G. (1982) Rietveld refinement with spallation neutron powder diffraction data. *Journal of Applied Crystallography*, 15(6), 581-589.
+
+[Mathematica で TOF1 を計算するアプリ](http://www.eqchem.s.u-tokyo.ac.jp/member/kom/CDF_files/GSASTOF3/gsastof1.html) を作りました。
+
+---
+
+## TOF1 の表式
+
+![GSAS TOF1](/wiki-images/tof-profile-functions/gsas-tof1/GSASTOF1.png)
+
+---
+
+## 数値計算上の注意
+
+実際に値を入れてみるとわかるのですが、
+
+$$\exp(u)\,\mathrm{erfc}(y)$$
+
+の項は、$\exp(u)$ が非常に大きな値になり、一方 $\mathrm{erfc}(y)$ はほとんど 0 に近い値になります。場合によってはオーバーフロー、アンダーフローをおこしますし、そうでなくても丸め誤差の原因になります。
+
+そこで、スケーリング相補誤差関数 $\mathrm{erfcx}(x)$
+
+$$\mathrm{erfcx}(x) \equiv e^{x^2}\mathrm{erfc}(x)$$
+
+を使って、
+
+$$\exp(u)\,\mathrm{erfc}(y) = \exp(u - y^2)\,\mathrm{erfcx}(y)$$
+
+と置き換えると、この問題を回避できます。$\mathrm{erfcx}(x)$ は多くのプログラム言語でサポートされています。

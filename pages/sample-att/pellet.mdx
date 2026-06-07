@@ -1,0 +1,96 @@
+---
+title: Pellet（ペレット型試料）
+sidebarOrder: 1
+attachments:
+  - label: "Atten4pellet.zip"
+    path: "/attachments/sample-att/pellet/Atten4pellet.zip"
+  - label: "Atten4pellet_dtot.zip"
+    path: "/attachments/sample-att/pellet/Atten4pellet_dtot.zip"
+  - label: "Atten4pellet_source.zip"
+    path: "/attachments/sample-att/pellet/Atten4pellet_source.zip"
+---
+
+troidal cell や cap など、対向アンビルでよく用いる試料形状（back-to-back spherical cap）というらしい。Spherical cap で検索すると、体積や表面積の公式が見つかる。
+
+たとえば、[Wikipedia: Spherical cap](https://en.wikipedia.org/wiki/Spherical_cap)
+
+![pellet](/wiki-images/sample-att/pellet/pellet.JPG)
+
+計算に使う形状パラメータ:
+
+![pellet draw](/wiki-images/sample-att/pellet/pellet_draw.JPG)
+
+---
+
+## ダウンロード
+
+実行ファイル + パラメータファイル
+
+- `Atten4pellet.zip` (2014/01/21 ver.)
+
+中身を確認したい方はこちら（ソースコード (Fortran 77) + 実行ファイル + パラメータファイル）:
+
+- `Atten4pellet_source.zip` (2014/01/21 ver.)
+
+2017/12/05 update — delta t/t = constant 版を作りました:
+
+- `Atten4pellet_dtot.zip` (2017/12/5 ver.)
+
+---
+
+## 使い方
+
+1. 任意のフォルダに `Atten4pellet.zip` を解凍
+
+2. `Atten4pellet_par.txt` を以下を参考にして編集
+
+   **1行目**
+   ```
+   0.6 2.5  : zps  rps  （上の図を参照。single troid や phi9-6 の場合、zps=2.3 rps=3.4 程度）
+   ```
+
+   **2行目**
+   ```
+   0.0229 0.0253  : mua mub、試料のattenuation coefficientを線形で近似したときの係数
+                    mu[mm-1] = mua * λ[Å] + mub とする
+   ```
+
+   **3行目（delta t = const の場合）**
+   ```
+   5 39995 10  : tofs stofe tofstep、tofの初期値、終値、ステップ幅 [microsec]
+   ```
+   **3行目（delta t/t = const の場合）**
+   ```
+   1000 80000 0.0005  : tofs tofe dtot、tofの初期値、終値、delta t/t
+   ```
+
+   **4行目**
+   ```
+   90 90 1  : gammas gammae gammastep、gamma（散乱角を水平面内に射影したときの入射光からの角度）
+              の初期値、終値、ステップ幅 [deg.]
+              （初期値と終値が同じ場合、ステップは無視される）
+   ```
+
+   **5行目**
+   ```
+   0 0 5  : nus nue nustep、nu（散乱角と水平面との角度、アジマス角）の初期値、終値、ステップ幅 [deg.]
+            （初期値と終値が同じ場合、ステップは無視される）
+   ```
+
+   **6行目**
+   ```
+   9  : 試料内のSampling pointの点数（多くの場合5点程度で収束しているようである）
+   ```
+
+   **7行目**
+   ```
+   gam90to90nu0to0_GL9  : 出力ファイル名（拡張子なし）
+   ```
+
+3. 作業フォルダでコマンドプロンプトを実行（Windows 7 以降では、アドレスバーで `cmd` とタイプ）
+
+4. 次のコマンドを入力してEnter:
+
+   ```
+   Atten4pellet.exe < Atten4pellet_par.txt
+   ```

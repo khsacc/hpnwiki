@@ -1,0 +1,93 @@
+---
+title: 非干渉性散乱
+sidebarOrder: 3
+---
+
+中性子回折の謳い文句として、よく「X線では見えない水素を捉える」などと書かれることがあります。
+
+しかし、実際には水素を重水素で置換して測定されることが少なくありません。それは水素が強い非干渉性散乱を出して、ブラッグピークがバックグラウンドノイズに埋もれてしまうためです。
+
+しかしなぜ水素は非干渉性散乱が強く、重水素はそれほどでもないのか、という点については多くの教科書でも触れられずに通り過ぎており、知らない人も多いのではないかと思います。
+
+この問に完全に答えるのは実はかなり難しく、私自身もよく理解していないのですが、分かっている範囲でここにメモしておきたいと思います。
+
+---
+
+## 水素の場合
+
+水素の原子核はスピン $1/2$（$= S_1$ としておきます）の粒子で、中性子もやはり $1/2$ のスピン（$= S_2$）を持っています。中性子が水素によって散乱されるとき、この２つの粒子は複合核を作ります。この複合核の全スピンは $S = S_1 + S_2 = 1$ となる case 1 と、$S = S_1 - S_2 = 0$ となる case 2 の２通りがあります。
+
+![H triplet singlet](/wiki-images/documents/incoherentscat/H_triplet_singlet.png)
+
+この２つのケースは、それぞれ異なる散乱長を持ち、これを $b^+$, $b^-$ と呼んでおきます。
+
+ここで、case 1 では、スピン磁気量子数 $S_z$ が
+
+$$S_z = 1, 0, -1$$
+
+の３種類を取りうるのに対し、case 2 では
+
+$$S_z = 0$$
+
+の１種類しかとりえません。極低温でなければ、この４つの状態は同じ確率で取りうるので、$b$ の平均 $\langle b \rangle$ は
+
+$$\langle b \rangle = \frac{3}{4}\, b^{+} + \frac{1}{4}\,b^- = -3.74\,\text{fm}$$
+
+とかけますが、この値は**干渉性散乱長 (coherent scattering length)** と呼ばれています。
+
+さらに２乗平均平方根 (root mean square) $\Delta b$ は
+
+$$\Delta b = \sqrt{\langle(b-\langle b\rangle)^2\rangle} = \sqrt{\langle b^2\rangle - \langle b\rangle^2} = 25.27\,\text{fm}$$
+
+ここで、
+
+$$\langle b^2\rangle = \frac{3}{4}(b^+)^2 + \frac{1}{4}(b^-)^2 = 6.524\times10^{-28}\,\text{m}^2$$
+
+非干渉性散乱断面積は
+
+$$\sigma_\text{inc} = 4\pi(\Delta b)^2 = 4\pi\left(\langle b^2\rangle - \langle b\rangle^2\right)$$
+
+この値が水素では非常に大きく（$\sigma_\text{inc}(\text{H}) = 80.27\,\text{barn}$）、それに対して干渉性散乱断面積は
+
+$$\sigma_\text{coh} = 4\pi \langle b\rangle^2 = 1.76\,\text{barn}$$
+
+とはるかに小さい値になります。
+
+![Hincoherent](/wiki-images/documents/incoherentscat/Hincoherent.png)
+
+---
+
+## 重水素の場合
+
+重水素の原子核（重陽子）のスピンは $1$ です。中性子（スピン $1/2$）と複合核を作ると、全スピンは
+
+- $S = 3/2$（case 1: $2S+1=4$ 種類の $S_z$）
+- $S = 1/2$（case 2: $2S+1=2$ 種類の $S_z$）
+
+の２通りになります。
+
+![D quartet doublet](/wiki-images/documents/incoherentscat/D_quartet_doublet.png)
+
+この場合は状態数が
+
+- case 1: 4 種類
+- case 2: 2 種類
+
+なので、$b$ の平均は
+
+$$\langle b\rangle = \frac{4}{6}\, b^{+} + \frac{2}{6}\, b^- = 6.671\,\text{fm}$$
+
+非干渉性散乱断面積 $\sigma_\text{inc}(\text{D}) = 2.05\,\text{barn}$ となり、水素と比べると大幅に小さくなります。
+
+![Dincoherent](/wiki-images/documents/incoherentscat/Dincoherent.png)
+
+---
+
+## まとめ
+
+| 核種 | $\sigma_\text{coh}$ [barn] | $\sigma_\text{inc}$ [barn] |
+|------|--------------------------|--------------------------|
+| H    | 1.76                     | 80.27                    |
+| D    | 5.59                     | 2.05                     |
+
+水素では $b^+$ と $b^-$ の差が非常に大きく、スピン状態の不確定さが大きな非干渉性散乱を引き起こします。重水素では $b^+$ と $b^-$ の差が小さく、また状態数の比率も違うため、非干渉性散乱が小さくなります。

@@ -1,0 +1,96 @@
+#include <origin.h>
+
+// Add your special include files here.
+// For example, if you want to fit with functions from the NAG library, 
+// add the header file for the NAG functions here.
+
+    double el = 0.5772156649015328;
+
+// Add code here for other Origin C functions that you want to define in this file,
+// and access in your fitting function.
+double I(complex z)
+{
+	complex iq;
+	double iq2;
+		iq=(exp(z)*e1z(z));
+		iq2=iq.m_im;
+	return iq2;
+}
+
+complex e1z(complex z){
+    double x,a0;
+    complex ce1,cr,ct0,ct,cc;
+    int k;
+    double m;
+    
+	x = z.m_re;
+    a0 = cabs(z);
+    
+    complex c(1.0,0.0);
+    
+    if (a0 == 0.0) {
+    	ce1 = c*1.0E300;
+    }
+    else if (a0 <= 10.0 || x < 0.0 && a0 < 20.0) {
+       ce1 = c;
+       cr = c;
+       for (k=1;k<=150;k++){
+           cr = (-cr * k * z) / ((k + 1.0)*(k + 1.0));
+           ce1 = ce1 + cr;
+           m =  cabs(ce1);
+           m = m * 1.0E-15;
+           if (cabs(cr) <= m){
+              ce1 = -el - log(z) + z*ce1;
+              break;
+           }
+       }
+    }
+    else {
+         complex ct(0.0,0.0);
+         for (k=120;k>=1;k=k-1){
+             ct0 = k/(1.+k/(z+ct0));
+         }
+         ct = 1.0/(z+ct0);
+         ce1 = exp(-z) * ct;
+         if (x <= 0. && z.m_im == 0.) {
+         	complex cc(0.0,1.0);
+            ce1=ce1-pi*cc;
+         }
+    }
+    return ce1;
+}
+
+
+
+
+//----------------------------------------------------------
+// 
+void _nlsfGSAS3(
+// Fit Parameter(s):
+double A, double y0, double alp, double bet, double sig, double gam, double Tph,
+// Independent Variable(s):
+double t,
+// Dependent Variable(s):
+double& H)
+{
+	// Beginning of editable part
+	double deltaT = t - Tph;
+	double N = alp*bet/(2.0*(alp+bet));
+	double u = alp*(alp*sig + 2.0*deltaT)/2.0;
+	double v = bet*(bet*sig - 2.0*deltaT)/2.0;
+	
+	double y = (alp*sig + deltaT)/sqrt(2.0*sig);
+	double z = (bet*sig - deltaT)/sqrt(2.0*sig);
+	
+	complex p(-alp*deltaT,alp*gam/2.0);
+	complex q(-bet*deltaT,bet*gam/2.0);
+	
+	double Gamg=sqrt((8*ln(2))*sig);
+	double G=(Gamg^5 + 2.69269*Gamg^4*gam + 2.42843*Gamg^3*gam^2 + 4.47163*Gamg^2*gam^3 + 0.07842*Gamg*gam^4 + gam^5)^(0.2);
+	double gamoG = gam/G;
+	double eta=1.36603*gamoG - 0.47719*gamoG^2 + 0.11116*gamoG^3;
+	//        H = y0+A*( N*(exp(u)*erfc(y) + exp(v)*erfc(z)) );  < TOF1
+			H = y0+A*((1-eta)*N*(exp(u)*erfc(y) + exp(v)*erfc(z))-2.0*N*eta*(I(p)+I(q))/pi );	
+
+	// End of editable part
+}

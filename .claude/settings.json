@@ -3,7 +3,29 @@
     "allow": [
       "Bash(yarn add *)",
       "Bash(yarn info *)",
-      "Bash(node -e \"console.log\\(require\\('./node_modules/mongodb-level/package.json'\\).version\\)\")"
+      "Bash(node -e \"console.log\\(require\\('./node_modules/mongodb-level/package.json'\\).version\\)\")",
+      "Bash(node scripts/generate-meta.mjs)",
+      "Bash(python3)",
+      "Bash(node -e ' *)",
+      "Bash(node /Users/hiroki/Documents/UTokyo/KagiLab/hpnwiki/scripts/generate-meta.mjs)",
+      "Bash(grep -o \"collections/\\\\${document2[^}]*}[^\\\\\"']*\" /Users/hiroki/Documents/UTokyo/KagiLab/hpnwiki/node_modules/tinacms/dist/index.js)",
+      "Bash(grep -o 'breadcrumbs\\\\.join\\([^\\)]*\\)[^`\"'\"'\"']*' /Users/hiroki/Documents/UTokyo/KagiLab/hpnwiki/node_modules/tinacms/dist/index.js)",
+      "Bash(grep -o 'collections/[^`\"'\"'\"' ]*breadcrumbs[^`\"'\"'\"' ]*' /Users/hiroki/Documents/UTokyo/KagiLab/hpnwiki/node_modules/tinacms/dist/index.js)",
+      "Bash(grep -o 'collections/\\\\${[^`]*breadcrumbs\\\\.join\\([^`]*\\)' /Users/hiroki/Documents/UTokyo/KagiLab/hpnwiki/node_modules/tinacms/dist/index.js)",
+      "Bash(python3 -m json.tool)",
+      "Bash(npx tsc *)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(yarn dev *)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(tail -20 /tmp/hpnwiki-dev.log)",
+      "Read(//private/tmp/**)",
+      "Bash(pkill -f \"25864\")",
+      "Bash(curl -sf http://localhost:3000/tof-profile-functions/cole-windsor)",
+      "Bash(/usr/bin/curl -sf \"http://localhost:3000/cellassembly/double-troid\")",
+      "Bash(/usr/bin/grep -o '添付ファイル')",
+      "Bash(/usr/bin/head -1)",
+      "Bash(/usr/bin/curl -sf \"http://localhost:3000/tof-profile-functions/bl11-pulse-shape\")"
     ]
   }
 }

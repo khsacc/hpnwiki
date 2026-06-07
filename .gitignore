@@ -10,6 +10,9 @@ public/admin/
 tina/__generated__/
 .tina/__generated__/
 
+# 自動生成サイドバー設定（generate-meta.mjs が生成）
+pages/**/_meta.json
+
 # 環境変数（絶対にコミットしない）
 .env
 .env.local
@@ -28,3 +31,6 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# 旧サイトデータ（移行元、ローカルのみ）
+__ref__/

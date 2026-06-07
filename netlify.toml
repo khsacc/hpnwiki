@@ -1,5 +1,6 @@
 [build]
   command = "yarn build"
+  # generate-meta.mjs は yarn build 内で実行されます（package.json の build スクリプト参照）
   publish = ".next"
 
 [build.environment]

@@ -1,0 +1,88 @@
+---
+title: Cole-Windsor 関数
+sidebarOrder: 2
+---
+
+**参考文献:** I. Cole and C.G. Windsor (1980) The lineshapes in pulsed neutron powder diffraction, *Nuclear Instruments and Methods*, 171, 107-113.
+
+---
+
+## 関数の形
+
+非対称ガウシアン + exponential decay
+
+![Cole-Windsor 1](/wiki-images/tof-profile-functions/cole-windsor/ColeWindsor1.PNG)
+
+１本のピークあたりのパラメータは、
+
+- $\sigma_1$: ピークの左側（短波長側）のbroadening
+- $\sigma_2$: ピークの右側（長波長側）のbroadening
+- $\gamma$: 右側のみ寄与する裾野
+
+の３つですが、$\sigma_1$、$\sigma_2$ の代わりに、より解釈のし易い $\alpha$、$\beta$ を導入しています。
+
+![Cole-Windsor 2](/wiki-images/tof-profile-functions/cole-windsor/ColeWindsor2.PNG)
+
+$\alpha$、$\beta$、$\gamma$ が与えられると、まず赤枠で囲った式にしたがって $\sigma_2$ を計算し、
+
+$$\sigma_1 = \sigma_2/\beta$$
+
+より $\sigma_1$ を得て、一番上に示した式に代入します。
+
+---
+
+## 各パラメータの波長依存性
+
+経験的に以下の式で与えられています。（それなりに物理的背景はあるようなのですが・・・結局最後は経験式です。）
+
+$$
+\gamma = \gamma_1 + \gamma_2 \lambda^2
+$$
+
+$$
+\alpha = \alpha_1 + \frac{\alpha_2 e^{-\alpha_3/\lambda^2}}{\lambda^5}
+$$
+
+$$
+\beta = 1 - (\beta_1 - 1)e^{-\beta_2/\lambda^2}
+$$
+
+論文では、Ni から得られたパターンに対し、試料由来のブロードニングがないと仮定し、ここまでで得られるパラメータ
+
+$$\alpha_1, \alpha_2, \alpha_3, \beta_1, \beta_2, \gamma_1, \gamma_2$$
+
+を試料によらないモデレータ固有のパラメータとみなしているようです。
+
+試料によるブロードニングは、試料由来の広がりを $\sigma_s$ として、$\sigma_1$, $\sigma_2$ に畳み込んだ $\sigma_1'$, $\sigma_2'$ を上式の $\sigma_1$, $\sigma_2$ の代わりに使用します。$\sigma_1'$, $\sigma_2'$ は $\sigma_1$, $\sigma_2$ と $\sigma_s$ のコンボリューションの近似として、以下の表式を利用していますが、より厳密なコンボリューションの結果とよく一致するようです。
+
+$$
+\sigma_1' = \sqrt{\sigma_1^2 + \sigma_s^2}
+$$
+
+$$
+\sigma_2' = \sqrt{\sigma_2^2 + \sigma_s^2}
+$$
+
+$$
+t_1' = \gamma(\sigma_2^2 + \sigma_s^2) + t_0
+$$
+
+$$
+A_1' = A \exp\left[\frac{\gamma^2(\sigma_2^2 + \sigma_s^2)}{2}\right]
+$$
+
+$$
+\frac{1}{A} = \frac{\pi}{2}\left[\sigma_1' + \sigma_2'\,\mathrm{erf}\!\left(\frac{\gamma \sigma_2'}{\sqrt{2}}\right)\right] + \frac{1}{\gamma} \exp\!\left(-\frac{\gamma^2 {\sigma_2'}^2}{2}\right)
+$$
+
+---
+
+## 特徴と評価
+
+この関数は、GSAS TOF3 に比べてパラメータ間の相関が小さく、比較的安定して収束します。内部に使用している関数も発散しにくい形になっています。（exp の中身が大きくなりすぎない、など）
+
+試しに、BL11 で得られた Si の 111 にフィットしてみましたが、結構よく合っているようで、試料由来の Lorentzian 成分が無視できる場合には、よいプロファイル関数になりそうです。
+
+![Cole-Windsor Si fit](/wiki-images/tof-profile-functions/cole-windsor/ColeWindsor_Sifit.png)
+
+$\lambda$ 依存性が BL11 によく合うかどうかは、調査中。

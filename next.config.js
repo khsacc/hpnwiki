@@ -11,10 +11,6 @@ const withNextra = require('nextra')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Netlify Functions との疎通のためリライト設定（必要に応じて調整）
-  async rewrites() {
-    return []
-  },
 }
 
 module.exports = withNextra(nextConfig)

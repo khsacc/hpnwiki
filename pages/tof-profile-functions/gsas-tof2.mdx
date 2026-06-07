@@ -1,0 +1,36 @@
+---
+title: GSAS TOF Profile Function 2
+sidebarOrder: 4
+---
+
+TOF2 = Ikeda-Carpenter 関数 と pseudo-Voigt 関数のコンボリューション
+
+モデレータのパルス形状が Ikeda-Carpenter 関数で表現できるなら、この関数が一番物理的にもっともらしいのですが、結論から言うと、BL11 のパルス形状は Ikeda-Carpenter 関数ではよく合わないので、BL11 では使えません。
+
+TOF2 の関数を全て表式するのは骨が折れるので、ここでは基本的な関数だけおさらいしておきます。
+
+---
+
+## Ikeda-Carpenter 関数
+
+![GSAS TOF2 1](/wiki-images/tof-profile-functions/gsas-tof2/GSASTOF2_1.PNG)
+
+![GSAS TOF2 2](/wiki-images/tof-profile-functions/gsas-tof2/GSASTOF2_2.PNG)
+
+![GSAS TOF2 3](/wiki-images/tof-profile-functions/gsas-tof2/GSASTOF2_3.PNG)
+
+![GSAS TOF2 4](/wiki-images/tof-profile-functions/gsas-tof2/GSASTOF2_4.png)
+
+---
+
+## GSAS での近似
+
+GSAS では、この後の計算を簡単にするために、$I(t)$ を摂動法を利用して近似した以下の式を使っています。
+
+![GSAS TOF2 5](/wiki-images/tof-profile-functions/gsas-tof2/GSASTOF2_5.png)
+
+こうすると、$I_k(t)$ は
+
+$$a\,\exp(-bt)$$
+
+という項のみからなります。これなら解析的な積分が可能のようです（自分では検算していませんが）。

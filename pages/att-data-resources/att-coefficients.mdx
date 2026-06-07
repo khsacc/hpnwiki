@@ -1,0 +1,55 @@
+---
+title: 減弱係数データ
+sidebarOrder: 1
+attachments:
+  - label: "WC (FUJILLOY, MF10)"
+    path: "/attachments/att-data-resources/att-coefficients/wc_mu.dat"
+  - label: "Sintered Diamond (COMPAX 5913 PCD)"
+    path: "/attachments/att-data-resources/att-coefficients/sc_att_smooth.dat"
+  - label: "Y-doped Zirconia (Tohoku Ceramic, TCZM)"
+    path: "/attachments/att-data-resources/att-coefficients/Zirconia_jan2010.dat"
+---
+
+## WC (FUJILLOY, MF10)
+
+データファイル: `wc_mu.dat`
+
+6 Å弱までは測定値、以降長波長側は線形で外挿。３列目はカウントから推定したエラー。
+
+---
+
+## Sintered Diamond (COMPAX 5913 PCD)
+
+データファイル: `sc_att_smooth.dat`
+
+6 Å弱までは測定値、以降長波長側は線形で外挿、さらにスムージングしたもの。３列目はカウントから推定したエラー。
+
+---
+
+## Y-doped Zirconia (Tohoku Ceramic, TCZM)
+
+データファイル: `Zirconia_jan2010.dat`
+
+全て測定値（2010/Jan 匠にて）
+
+![アンビルのattenuation coefficient](/wiki-images/att-data-resources/att-coefficients/anvils_mu.png)
+
+---
+
+## TiZr
+
+2010年5月 匠にて測定。比較的統計のよい 1 〜 4 Å で線形フィットすると
+
+$$\mu\,[\text{mm}^{-1}] = 0.0184(3)\,\lambda + 0.01608(11)$$
+
+となった。
+
+![TiZr の attenuation coefficient](/wiki-images/att-data-resources/att-coefficients/tizr_mu.png)
+
+---
+
+## Vanadium
+
+[Neutron activation and scattering calculator](http://www.ncnr.nist.gov/resources/activation/) から計算
+
+$$\mu\,[\text{mm}^{-1}] = 0.0200\,\lambda\,[\text{\AA}] + 0.0361$$

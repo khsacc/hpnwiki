@@ -1,0 +1,112 @@
+---
+title: Fit by TOF1
+sidebarOrder: 1
+---
+
+（2014/3/26 ver.）
+
+BL11 のモデレータのパルス形状を何らかの関数でフィットし、これをモデレータの関数として使えば、試料のプロファイルパラメータとは独立のパラメータとして、どの試料でも使えそうです。
+
+そこで、BL11 のモデレータ関数を [GSAS TOF profile function 1](/tof-profile-functions/gsas-tof1)（以下 TOF1）でフィットしてみます。
+
+TOF1 をピーク1本にあてはめたとき、パラメータは
+
+- $\alpha$: exponential rise
+- $\beta$: exponential decay
+- $T_{ph}$: peak centre
+- $\text{sig}^2$: Gaussian peak width
+- $\text{scale}$: scale factor
+
+の５つになります。TOF1 に使われる $\alpha$、$\beta$ の定義は、TOF3 と同じなので、TOF1 で決めた $\alpha$、$\beta$ は TOF3 でもそのまま使用することができます。（しかし $\alpha$ については、実際 fit する $d$ 依存性に関するパラメータの定義は微妙に異なるので注意）
+
+ピークフィッティングは Origin 8.5 で行いました。いくつかの波長について、フィッティングの結果を以下に図示します。
+
+![BL11 pulse shape fitting](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/BL11_pulse_shape_fitting.png)
+
+ご覧のとおり、完璧とは言い難いんですが（注1）、[TOF1](/tof-profile-functions/gsas-tof1) ではこれ以上望めないので、これで妥協しておきます。ちなみに TOF1 の関数は、（プロファイル関数はだいたいそうなのですが）非常によく似た２つのピーク関数の線形結合なので、ピーク1本だけでフィッティングしようとすると結構不安定で、初期値をうまく選んでやらないと発散します。
+
+得られた $\alpha$、$\beta$、$T_{ph}$、$\sigma^2$ を $d$ (= $\lambda/2\sin\theta$) を横軸としてプロットしてみます。
+
+---
+
+## $\alpha$ のd依存性
+
+![BL11 pulse shape alpha](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/BL11_pulse_shape_alpha.png)
+
+$\alpha$ は $d$ に反比例することがわかります。GSAS TOF3 でも
+
+$$\alpha = \alpha_0/d \quad (\alpha_0 \to 6.624\text{ に収束})$$
+
+として、$\alpha_0$ を振っていますが、$\alpha$ の $d$ 依存性については $\alpha_0/d$ でよく表現できそうです。
+
+ちなみに赤い点は、フィッティングの結果が悪く除外した点です。
+
+---
+
+## $\beta$ のd依存性
+
+![BL11 pulse shape beta](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/BL11_pulse_shape_beta.png)
+
+$\beta$ の $d$ 依存性は、TOF3 で採用されているような、
+
+$$\beta = \beta_0 + \beta_1/d^4$$
+
+では、うまく合いませんでした（青線）。むしろ $\alpha$ と同様に
+
+$$\beta = \beta_0/d \quad (\beta_0 = 0.11457\text{ に収束})$$
+
+としたほうが良さそうです。（赤線）
+
+---
+
+## $T_{ph}$ のd依存性
+
+![BL11 pulse shape Tph](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/BL11_pulse_shape_Tph.png)
+
+$T_{ph}$ は $d$ とともに増える傾向にありますが、途中複雑な挙動をしています。図には線形でフィットした赤線も乗せていますが、これは小さい $d$ の点が多いためにそちらの傾向に偏ったフィッティングになってしまっていますので、high-$d$ 側で大きくずれています。参考程度に見てください。
+
+**以下 2014/5/2 追記**
+
+$\alpha = 6.624/d$ で $\alpha$ を固定し、長波長側のパルスデータも含めてフィッティングしなおしました。さらに得られた $T_{ph}$ について
+
+$$d \text{ vs. } T_{ph}$$
+
+を
+
+$$y = \frac{a}{\exp(-b(x-c))+d} + ex$$
+
+でフィッティングしてみました。3〜4 Å くらいの下に凸の傾向は再現できませんが、それ以外は概ねよくあっています。
+
+![Tph fit by sigmoidal](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/Tph_fit_by_sigmoidal.png)
+
+上の式において、
+
+$$\exp(-b(x-c)) = \exp(-bx)\exp(bc)$$
+
+なので、
+
+$$\frac{\exp(bc)}{a} = f, \quad \frac{d}{a} = g$$
+
+とおけば
+
+$$y = \frac{1}{f\exp(-bx) + g} + ex$$
+
+となるので、パラメータは４つでよく、全て振ると発散します。そこで $a$ を 5 に fix していますが、これは最初の項のスケールを合わせているだけで、特に物理的意味はありません。しかし、こういう表式にしておくと、$c$ は 1.5 Å くらいの変曲点に直接対比ができる形になります。
+
+---
+
+## $\sigma^2$ のd依存性
+
+![BL11 pulse shape sig](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/BL11_pulse_shape_sig.png)
+
+$\sigma^2$ も、1.5 Å 程度から急激に増える傾向にあります。試料のピークに TOF3 でフィッティングするときは、この $\sigma^2$ に加えて、入射・出射の分散等による広がりが増えるので、この $\sigma^2_0$、$\sigma^2_1$、$\sigma^2_2$ をそのまま使ってもうまくいきません。モデレータのパルス形状としてはこういう傾向がある、程度にとらえてください。
+
+---
+
+## 注1
+
+この程度の当てはめでよければ、パラメータが1つしかない（scale を入れても２つ）関数でも、それなりにできますし、収束も早く、ずっと安定しています（下図）。
+
+![fit by simple exp](/wiki-images/tof-profile-functions/bl11-pulse-shape/fit-by-tof1/fit_by_simple_exp.png)
+
+この関数 $F(t)$ と $P(t)$ (pseudo-Voigt) のコンボリューション、あるいは $F(t)$ と $G(t)$ (Gaussian) のコンボリューションと $L(t)$ (Lorentzian) の mixing（この方がよさそうです）でも、試料のプロファイルをある程度再現できると思われます。

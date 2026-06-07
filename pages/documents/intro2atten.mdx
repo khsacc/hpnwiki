@@ -1,0 +1,66 @@
+---
+title: 減弱（吸収）の基礎
+sidebarOrder: 1
+---
+
+## Attenuation = Absorption loss + Scattering loss
+
+中性子が物資に入射されると、物質中の原子によって散乱・吸収されます。そうすると、透過していく中性子強度は入射するそれより弱くなっています。
+
+![Attenuation](/wiki-images/documents/intro2atten/attenuation.png)
+
+ここで
+
+$\sigma$: 原子核１個あたりの断面積
+
+$n$: 単位体積中の原子核の数
+
+とすると、単位面積単位秒あたりの座標 $z$ における強度 $I_z$ は、微小距離 $dz$ で、$\sigma n I_z$ だけ減衰します。
+
+$$-\frac{\mathrm{d} I}{\mathrm{d} z}=\sigma n I_z$$
+
+この微分方程式を $z=0$ のときの入射強度 $I_o$、厚さ $t$ として解くと、
+
+$$I=I_o\, \exp(-\sigma n t)$$
+
+となります。
+
+断面積 $\sigma$ は散乱によって失われる成分 $\sigma_\text{scat.}$ と吸収によって失われる成分 $\sigma_\text{abs.}$ に分けることができます。
+
+$$\sigma=\sigma_\text{scat.}+\sigma_\text{abs.}\equiv \sigma_\text{total}$$
+
+ここででてきた、
+
+- $\sigma_\text{scat.}$ を**散乱断面積** (scattering cross section) と呼び、
+- $\sigma_\text{abs.}$ を**吸収断面積** (absorption cross section) と呼びます。
+
+さらに
+
+- $\sigma_\text{total} \cdot n$ を **attenuation coefficient**
+- $\sigma_\text{abs.} \cdot n$ を **absorption coefficient**
+
+と定義できます。
+
+Attenuation coefficient はよく $\mu$ で表記され、単位は [mm$^{-1}$] や [cm$^{-1}$] など [長さ$^{-1}$] の dimension を持ちます。
+
+日本語では、attenuation coefficient に対し「減弱係数」や「減衰係数」という訳語が存在しますがあまり見かけません。absorption coefficient の「吸収係数」と区別したいときは、厳密には減弱係数と呼ぶべきでしょう。しかし、減弱、という語が浸透していないため **"散乱＝見かけの吸収"** とみなして、特に両者を区別する必要がない場合には、広い意味で減弱係数も「吸収係数」と言ってしまいます。（したがって本サイトにあるプログラムも「減弱補正プログラム」ではなく、「吸収補正プログラム」と呼んでいます）
+
+本サイトでも、特に区別する必要がない場合、「吸収」と「減弱」を同義で使ってしまっています。
+
+## 吸収係数の波長依存性
+
+吸収断面積は中性子の速度に反比例します。中性子の速度は波長に反比例するため、結局吸収断面積（そして absorption coefficient）は波長に比例します。
+
+$$\mu_a \propto \lambda$$
+
+一方、散乱断面積は（共鳴吸収のある核種を除き）波長によらない定数です。よって、
+
+$$\mu(\lambda) = \mu_a \lambda + \mu_b$$
+
+と線形で近似することができます。ここで $\mu_a$ は吸収の寄与、$\mu_b$ は散乱の寄与です。
+
+実際にこの近似が成り立つのは、バナジウム（V）について実際に測定することで確認できます。Vは
+
+$$\mu(\lambda) [\text{mm}^{-1}] = 0.0200\,\lambda\,[\text{\AA}] + 0.0361$$
+
+と近似できます。

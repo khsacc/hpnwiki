@@ -1,0 +1,157 @@
+---
+title: V と Empty データ
+sidebarOrder: 2
+attachments:
+  - label: "2012dec_phi9-6_MF10_TiZr.csv"
+    path: "/attachments/att-data-resources/v-empty/2012dec_phi9-6_MF10_TiZr.csv"
+  - label: "2014Mar_phi9-6_TMS05t4_TiZr_A6061.csv"
+    path: "/attachments/att-data-resources/v-empty/2014Mar_phi9-6_TMS05t4_TiZr_A6061.csv"
+---
+
+MLF PLANET で測定した Vanadium (V) と Empty の散乱データを掲載しています。
+
+## データフォーマット
+
+```
+BL: PLANET
+測定日：
+Run#:
+セル構成：
+ターゲット出力 [kW]:
+積算時間 [h]:
+使用した検出器領域:
+Vanadium（ファイルリンク）
+Empty（ファイルリンク）
+```
+
+**Note:**
+
+* できればプロットを画像として貼り付ける
+* V data は細かい波長依存性は見ないので、実験時間の都合によっては２〜３時間でも良い（スムージングする）
+* 一方 Empty は、寄生散乱のBragg peak を取り除く、という観点から、長時間とることが望ましい
+
+***
+
+## 測定データ一覧
+
+### 2012/12/21
+
+* **BL:** PLANET
+* **Run#:** 4508 (V), 4736 (E)
+* **セル構成:**
+  * Anvil: phi9-6 MF10 (t=3)
+  * gasket: TiZr + A6061
+* **ターゲット出力:** \~300 kW
+* **積算時間:** \~2.5 h (V), \~8 h (E)
+* **使用した検出器領域:** 以下の領域をマスク（窓材のアルミからの散乱が切りきれていなかったため ← 後から気づいた）
+  * PSD 148-159, Pixel 46-50 (North)
+  * PSD 148-159, Pixel 49-51 (South)
+
+データファイル: `2012dec_phi9-6_MF10_TiZr.csv`
+
+![V empty 2012dec phi9-6](/wiki-images/att-data-resources/v-empty/V_empty_2012dec_phi9-6.png)
+
+***
+
+### 2014/3/6
+
+* **BL:** PLANET
+* **Run#:** 10618 (V), 10620 (E)
+* **セル構成:**
+  * Anvil: phi9-6 TMS-05 (t = 3)
+  * gasket: TiZr + A6061
+* **ターゲット出力:** \~300 kW
+* **積算時間:** 2 h (V), 14 h (E)
+* **使用した検出器領域:** 全検出器
+
+上流のコリメーターの位置を調整したので、2012年時より全体に30%ほど強度 up した。
+
+データファイル: `2014Mar_phi9-6_TMS05t4_TiZr_A6061.csv`
+
+![Graph2](/wiki-images/att-data-resources/v-empty/Graph2.png)
+
+比をとると 23000 microsec ぐらいに山があるかもしれない。アンビルの種類の違いを反映しているかも。
+
+2014/5/4追記 — delta Q const のbin でグラフを作ってみました。
+
+![Graph3](/wiki-images/att-data-resources/v-empty/Graph3.png)
+
+***
+
+### 2014/6/10
+
+* **BL:** PLANET
+* **Run#:** 12939 (V), 12932 (E)
+* **セル構成:**
+  * Anvil: phi9-6 TMS-05 (t = 3, Fujilloy)
+  * gasket: TiZr + A6061
+* **ターゲット出力:** \~300 kW double frame
+* **積算時間:** 5 h (V), 12 h (E)
+* **使用した検出器領域:** 全検出器
+
+2nd frame がわかりにくいので、log で表示:
+
+![V-E 2014 Jun](/wiki-images/att-data-resources/v-empty/V-E2014Jun.png)
+
+![V-E 2014 Jun log](/wiki-images/att-data-resources/v-empty/V-E2014Jun_log.png)
+
+40000 付近ののこぎり状のピークはバーストによるもの。V-E ではほぼきれいに消えている。2nd frame は 2 桁弱い（同じビン幅だと）。
+
+***
+
+### 2014/11/9
+
+* **BL:** PLANET
+* **Run#:** 14163 (V), 14152 (E)
+* **セル構成:**
+  * Anvil: phi9-6 ATZ (t = 6, Tohoku ceramic)
+  * gasket: TiZr + A6061
+* **ターゲット出力:** \~300 kW double frame
+* **積算時間:** 4 h (V), 8.5 h (E)
+* **使用した検出器領域:** 全検出器
+
+![V-E 2014 nov](/wiki-images/att-data-resources/v-empty/V-E2014nov.png)
+
+![V-E 2014 nov log](/wiki-images/att-data-resources/v-empty/V-E2014nov_log.png)
+
+ATZ と WC（TMS-05）の比較:
+
+![V\_Ecomare2014ATZ\_WC](/wiki-images/att-data-resources/v-empty/V_Ecomare2014ATZ_WC.png)
+
+***
+
+### 2014/12/11
+
+* **BL:** PLANET
+* **Run#:** double: 15164 (V), 15160 (E); single: 15165 (V), 15162 (E)
+* **セル構成:**
+  * Anvil: phi9-6 ATZ (t = 6, Tohoku ceramic)
+  * gasket: TiZr + A6061
+  * binder ring のテーパー部分を Cd でシールド。anvil の背面の穴に OD5.1 ID3.8 の hBN 筒を入射コリメーターとして挿入。
+* **ターゲット出力:** \~300 kW
+* **積算時間:** double: 2 h (V), 6 h (E); single: 1 h (V), 2 h (E)
+* **使用した検出器領域:** 全検出器
+
+2014/11 に比べると bkg が大きく下がった（V も下がったが）ことがわかる。gain はロスしているが、S/N はよいかもしれない。特に high-Q 側でアンビル由来のピークが減っている。
+
+**double:**
+
+![VE2014Dec double](/wiki-images/att-data-resources/v-empty/VE2014Dec_double.png)
+
+横軸 Q: Q = 1.48 Å⁻¹ 付近はバーストによるもの。
+
+delta Q const:
+
+![VE2014Dec double dqconst](/wiki-images/att-data-resources/v-empty/VE2014Dec_double_dqconst.png)
+
+**single:**
+
+![VE2014Dec single](/wiki-images/att-data-resources/v-empty/VE2014Dec_single.png)
+
+**double と single との比較:** 35000 以上では不一致が見られるが、それ以外はほぼ同じ。
+
+![VE double single compare](/wiki-images/att-data-resources/v-empty/VE_double_single_compare.png)
+
+**V-E のオーバーオール (delta Q const):**
+
+![V-EoA dqc](/wiki-images/att-data-resources/v-empty/V-EoA_dqc.png)

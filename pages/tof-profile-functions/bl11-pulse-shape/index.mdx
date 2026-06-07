@@ -1,0 +1,36 @@
+---
+title: BL11 パルス形状
+sidebarOrder: 6
+attachments:
+  - label: "パルス形状を計算するワークシート (BL11_time_profile.xlsm)"
+    path: "/attachments/tof-profile-functions/bl11-pulse-shape/BL11_time_profile.xlsm"
+---
+
+MLF には、
+
+- 結合型 (coupled)
+- 非結合型 (unpoisoned-decoupled)
+- 非結合-ポイゾン型 (poisoned-decoupled)
+
+の３種類のモデレータがあり、上から順にパルス形状はシャープになる一方、積分強度は減少します。
+
+MLF の多くの粉末回折 BL は分解能を優先するため、非結合-ポイゾン型を選択していますが、BL11 は高圧実験特有の問題から、少しでもシグナルを得るために非結合型を採用しています。また高圧ユーザーに関係するところでは、BL19 TAKUMI は非結合-ポイゾン型、BL21 NOVA は非結合型です。
+
+非結合型の BL は非結合-ポイゾン型より長波長側にテールが残るため、ピークプロファイルが複雑になります。ちなみに、結合型を採用しなかったのは、結合型だとピーク全体の積分強度は多少増えるのですが、ピークトップはそれほどゲインがなく、ピーク幅や裾野の広がりによって積分強度を稼いでいるので、粉末回折をやるにはデメリットの方が大きいと判断したためです。
+
+MLF の各ビームラインのパルス特性は、J-PARC の HP 内にて「[各ビームライン毎のパルスデータ、モデレータ表面の輝度分布](http://j-parc.jp/researcher/MatLife/ja/instrumentation/deta/Pulse_0310_mod.pdf)」として公表されています。
+
+これから BL11 のパルスデータを一部抜粋すると、下の図のようになります。
+
+![BL11 pulse shape](/wiki-images/tof-profile-functions/bl11-pulse-shape/BL11_pulse_shape.png)
+
+波長によってパルス形状が大きく違うことがわかります。
+
+このパルス形状を表現する関数は、[田村ら (2003)](http://jolissrch-inter.tokai-sc.jaea.go.jp/search/servlet/search?22515) によって与えられています。基本的には Ikeda-Carpenter 関数と、それを多少変形した関数、さらに exponential decay の組み合わせによって表現されます。
+（興味のある方は、パルス形状を計算するワークシート `BL11_time_profile.xlsm` を作りましたので、そちらをご覧ください。）
+
+この関数がリートベルト解析プログラムに組み込まれているといいのですが、残念ながら現存するソフトウェアには実装されていません。そこで、Z-Rietveld, GSAS, Fullprof などで使用可能な GSAS TOF profile function 3 でリートベルト解析を行うことを念頭におき、その関数の中で使われているパラメータ $\alpha$、$\beta$ を、与えられたパルス形状から求めてみたいと思います。
+
+## サブページ
+
+- [Fit by TOF1](/tof-profile-functions/bl11-pulse-shape/fit-by-tof1)

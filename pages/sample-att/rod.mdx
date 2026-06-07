@@ -1,0 +1,24 @@
+---
+title: Rod（棒型試料）
+sidebarOrder: 2
+---
+
+V-can に入った試料や cubic cell assembly の場合の試料の形状。
+
+![rod](/wiki-images/sample-att/rod/rod.png)
+
+入射中性子は rod 軸に垂直に入射するものとする。
+
+**＜コードは製作中＞**
+
+---
+
+## 解析式
+
+$h = \infty$ として水平面のみの散乱を考えるときには、$A = I/I_o$ は
+
+$$A = \frac{1}{\pi R^2} \int_{0}^{R} \int_{0}^{2\pi} \exp\left(-\mu\left\{\left[R^2 - r^2\sin^2(\theta+\phi)\right]^{1/2} + \left[R^2 - r^2\sin^2(\theta-\phi)\right]^{1/2}\right\}\right) \times \cosh(2\mu r\sin\theta\sin\phi)\, r\, \mathrm{d}r\, \mathrm{d}\phi$$
+
+と解析的に表現できます。
+
+![rod_att_ana](/wiki-images/sample-att/rod/rod_att_ana.png)

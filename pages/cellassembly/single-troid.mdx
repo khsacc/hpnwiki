@@ -1,0 +1,60 @@
+---
+title: Single Troid
+sidebarOrder: 3
+attachments:
+  - label: "Atten4powST.zip"
+    path: "/attachments/cellassembly/single-troid/Atten4powST.zip"
+  - label: "Atten4powSTsource19Jan2014.zip"
+    path: "/attachments/cellassembly/single-troid/Atten4powSTsource19Jan2014.zip"
+  - label: "Single troidal anvil の光路長計算.pdf"
+    path: "/attachments/cellassembly/single-troid/Single_troidal_anvil_の光路長計算.pdf"
+---
+
+## ダウンロード
+
+実行ファイル、パラメータファイル (par.txt) およびタングステンカーバイド (Ni-binder, MF10) の attenuation coefficient データ
+
+- `Atten4powST.zip` (2014/01/19 ver.)
+- ソースコード（コンパイル済み実行ファイルを含む）: `Atten4powSTsource19Jan2014.zip` (2014/01/19 ver.)
+- 光路長計算の解説PDF: `Single troidal anvil の光路長計算.pdf`
+
+---
+
+## 使い方
+
+1. 以下の3つのファイルを適当なフォルダに入れる。
+
+   `Atten4powST.exe`, `par.txt`, `wc_mu.dat`
+
+2. `par.txt` を必要に応じて編集
+
+### par.txt の中身
+
+```
+10          : サンプリングポイントの1軸あたりの数（10で十分。5程度でもよい）
+3           : 幾何学的パラメータの数（Single toroidal anvilの場合は3）
+7.75        : gp(1), 外側のgasket (ring)の半径 [mm]*
+0.4         : gp(2), gasket最薄部の厚さ [mm]*
+0.8         : gp(3), anvil gap [mm]*
+83.1 96.9 1 : gammastart、gamma end、gamma step [deg]
+0 0 1       : nustart, nu end, nu step [deg]
+wc_mu.dat   : アンビルの吸収係数情報のあるファイル名
+0 0         : 試料の吸収係数 [mm]（μa, μb：μsample = μa * λ + μb）
+400 100     : bin数、tofのステップ幅 [μsec]
+26.5        : L（PLANET → 26.5, TAKUMI → 42, NOVA → ?）
+test1.6.dat : 出力ファイル名
+```
+
+（`*` gp(1)〜(3)がどこの部分を表すかわからない場合は、「Single toroidal anvil の光路長計算.pdf」を見てください。）
+
+3. ファイルのあるフォルダでコマンドプロンプトを開く（Windows 7 の場合、アドレスバーで `cmd` とタイプ）
+
+4. コマンドプロンプト上で
+
+   ```
+   Atten4powST.exe < par.txt
+   ```
+
+   とタイプすると、実行する。
+
+出力ファイルは、`tof, A(=I/Io)` となっている。

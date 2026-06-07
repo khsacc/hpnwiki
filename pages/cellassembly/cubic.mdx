@@ -1,0 +1,49 @@
+---
+title: Cubic anvil (6-6 type)
+sidebarOrder: 1
+attachments:
+  - label: "Atten4cubic.zip"
+    path: "/attachments/cellassembly/cubic/Atten4cubic.zip"
+  - label: "Atten4cubic_source23Jan2014.zip"
+    path: "/attachments/cellassembly/cubic/Atten4cubic_source23Jan2014.zip"
+  - label: "Cubic anvil cell の光路長計算.pdf"
+    path: "/attachments/cellassembly/cubic/Cubic_anvil_cell_の光路長計算.pdf"
+---
+
+## ダウンロード
+
+実行ファイル、パラメータファイル (par.txt) およびタングステンカーバイド（Ni-binder, MF10）のattenuation coefficientデータ
+
+- `Atten4cubic.zip` (2014/01/23 ver.)
+- ソースコード（コンパイル済み実行ファイルを含む）: `Atten4cubic_source23Jan2014.zip` (2014/01/23 ver.)
+- 光路長計算の解説PDF: `Cubic anvil cell の光路長計算.pdf`
+
+---
+
+## 使い方
+
+1. 以下の3つのファイルを適当なフォルダに入れる。
+
+2. `par.txt` を必要に応じて編集
+
+### par.txt の中身
+
+```
+30          : nstepR、動径（r）軸の分点の数
+20          : nstepT、偏角（θ）の分点の数
+5           : nstepY、高さ方向（y軸方向）の分点の数
+6           : 幾何学的パラメータの数（Palm cubic anvil cellの場合は6）
+6.0         : gp(1)、アンビルトップサイズ [mm]*
+2.121320344 : gp(2)、アンビルギャップ [mm]*
+3.0         : gp(3)、試料直径 [mm]*
+3.0         : gp(4)、試料高さ [mm]*
+9.0         : gp(5)、ガスケット高さ [mm]*
+12.72792206 : gp(6)、ガスケット対角長さ [mm]*
+85.0 95.0 1 : gamma start, gamma end, gamma step [deg]
+-15.0 15.0 1 : nu start, nu end, nu step [deg]
+wc_mu.dat   : アンビルの吸収係数情報のあるファイル名
+0 0         : 試料の吸収係数 [mm]（μa, μb：μsample = μa * λ + μb）
+1000 50     : λ の分点数、λ の最大値 × 100
+```
+
+（`*`印のパラメータは、実際の実験セットアップに合わせて変更してください）
