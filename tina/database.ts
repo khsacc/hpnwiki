@@ -2,9 +2,10 @@ import { createDatabase, createLocalDatabase } from '@tinacms/datalayer'
 import { MongodbLevel } from 'mongodb-level'
 import { GitHubProvider } from 'tinacms-gitprovider-github'
 
+const isBrowser = typeof window !== 'undefined'
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
 
-if (!isLocal && !process.env.MONGO_URI) {
+if (!isBrowser && !isLocal && !process.env.MONGO_URI) {
   throw new Error(
     'TinaCMS production mode requires MONGO_URI. Set TINA_PUBLIC_IS_LOCAL=true for local development.'
   )
@@ -22,20 +23,22 @@ function withAutoDate<T extends { put: (...args: any[]) => Promise<any> }>(db: T
   return db
 }
 
-const db = isLocal
-  ? createLocalDatabase()
-  : createDatabase({
-      gitProvider: new GitHubProvider({
-        owner: process.env.GITHUB_OWNER!,
-        repo: process.env.GITHUB_REPO!,
-        token: process.env.GITHUB_PERSONAL_ACCESS_TOKEN!,
-        branch: process.env.GITHUB_BRANCH ?? 'main',
-      }),
-      databaseAdapter: new MongodbLevel<string, Record<string, any>>({
-        collectionName: 'tinacms',
-        dbName: 'tinacms',
-        mongoUri: process.env.MONGO_URI!,
-      }),
-    })
+const db = !isBrowser
+  ? isLocal
+    ? createLocalDatabase()
+    : createDatabase({
+        gitProvider: new GitHubProvider({
+          owner: process.env.GITHUB_OWNER!,
+          repo: process.env.GITHUB_REPO!,
+          token: process.env.GITHUB_PERSONAL_ACCESS_TOKEN!,
+          branch: process.env.GITHUB_BRANCH ?? 'main',
+        }),
+        databaseAdapter: new MongodbLevel<string, Record<string, any>>({
+          collectionName: 'tinacms',
+          dbName: 'tinacms',
+          mongoUri: process.env.MONGO_URI!,
+        }),
+      })
+  : (undefined as any)
 
-export default withAutoDate(db)
+export default !isBrowser ? withAutoDate(db) : (undefined as any)
