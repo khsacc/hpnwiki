@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "node scripts/patch-heroicons.js",
-    "dev": "node scripts/generate-meta.mjs && tinacms dev -c \"next dev\"",
+    "dev": "node scripts/generate-meta.mjs && TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev\"",
     "build": "node scripts/patch-heroicons.js && node scripts/migrate-users.js && node scripts/generate-meta.mjs && tinacms build && next build",
     "start": "next start",
     "lint": "next lint"

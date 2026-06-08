@@ -20,6 +20,8 @@ function TinaEditMode() {
 
   useEffect(() => {
     if (typeof window === 'undefined' || window === window.parent) return
+    // tina-preview/* ページは自身で useTina を呼ぶため二重登録しない
+    if (router.pathname.startsWith('/tina-preview')) return
 
     const path = router.asPath.split('?')[0].split('#')[0]
     const candidates =

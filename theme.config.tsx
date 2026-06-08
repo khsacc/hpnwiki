@@ -4,6 +4,21 @@ import { useConfig } from 'nextra-theme-docs'
 
 type Attachment = { label?: string; path: string }
 
+function LastEditedInfo() {
+  const { frontMatter } = useConfig()
+  const date = frontMatter.date as string | undefined
+  const lastEditor = (frontMatter.lastEditor as string | undefined) ?? 'Admin'
+  if (!date) return null
+  const formatted = new Date(date).toLocaleDateString('ja-JP', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  })
+  return (
+    <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>
+      最終更新: {formatted}（{lastEditor}）
+    </span>
+  )
+}
+
 function AttachmentsTocSection() {
   const { frontMatter } = useConfig()
   const attachments = frontMatter.attachments as Attachment[] | undefined
@@ -105,7 +120,8 @@ const config: DocsThemeConfig = {
   footer: {
     text: (
       <span>
-        © {new Date().getFullYear()} Neutron @ Pressure Wiki. All rights reserved.
+        Primary writer: kom (at) eqchem.s.u-tokyo.ac.jp<br />
+        Development: hiroki (at) eqchem.s.u-tokyo.ac.jp
       </span>
     ),
   },
@@ -164,6 +180,7 @@ const config: DocsThemeConfig = {
     title: '目次',
     extraContent: <AttachmentsTocSection />,
   },
+  gitTimestamp: <LastEditedInfo />,
   search: {
     placeholder: 'ドキュメントを検索...',
   },

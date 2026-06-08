@@ -1,0 +1,60 @@
+---
+title: 温度補正
+sidebarOrder: 2
+date: '2026-06-08T11:29:18.658Z'
+attachments:
+  - label: T-calib2019Jun21.xlsx
+    path: /attachments/T-calib2019Jun21.xlsx
+---
+
+import TCalibrationApp from './T-calibration_app'
+
+# Mito System の温度補正
+
+- K熱電対を使っているので、低温下で起電力が弱くなり系統誤差が生じる。
+- TcをPt測温抵抗体のすぐそばの銅ブロックにアルミテープで固定し、液体窒素温度まで冷却しながらログをとる。
+
+| 項目 | 内容 |
+|------|------|
+| 実験日 | 2014/3/12–13 |
+| 実験者 | 小松・町田 (CROSS) |
+
+液体窒素温度 (−196 °C, 77 K) に到達してから５時間ほど放置し、温度が安定した後に、−120 °C 程度までは 0.1 K/min でゆっくりコントロールした。それ以上の温度では Tc との温度差が小さいのと、実験時間の制約もあり 1 K/min として急加熱した。
+
+![温度ログ](/wiki-images/mito-system/t-calibration/tccalib.png)
+
+PVと書いてあるのが、測温抵抗体の読み。RAMPを変えた時に若干 Tc との比例関係が変わっているようだ。（温度が均一になっていない？）
+
+Tcの長さが長く、ノイズがのりやすいので、将来的には、小型の測温抵抗体をはりつけるなどの対策が必要だろう。
+
+
+
+## 補正式
+
+Tc を x、Pt 測温抵抗体の読みを y として、プロット。
+
+**Tc1:**
+
+$$y = 1.41887 + 1.02797\,x$$
+
+![Tc1 キャリブレーション](/wiki-images/mito-system/t-calibration/tc1.png)
+
+**Tc2:**
+
+$$y = 1.340045 + 1.021\,x$$
+
+![Tc2 キャリブレーション](/wiki-images/mito-system/t-calibration/tc2.png)
+
+（参考）TC1 と TC2 の平均をとると、
+
+$$y = 1.3795 + 1.0245\,x$$
+
+
+## 補正値計算アプリ
+
+<TCalibrationApp />
+
+
+## 添付ファイル
+
+- [T-calib2019Jun21.xlsx](/attachments/T-calib2019Jun21.xlsx) — キャリブレーションデータ (v.3)

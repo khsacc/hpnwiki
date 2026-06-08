@@ -13,7 +13,7 @@ import { join, extname, basename } from 'path'
 const DOCS_ROOT = 'pages'
 
 // Next.js インフラ用ディレクトリ・ファイルは除外
-const EXCLUDE_NAMES = new Set(['api', '_app.tsx', '_document.tsx', '_error.tsx', 'admin-redirect.tsx'])
+const EXCLUDE_NAMES = new Set(['api', '_app.tsx', '_document.tsx', '_error.tsx', 'admin-redirect.tsx', 'tina-preview'])
 
 /** YAML フロントマターを簡易パース（yaml パーサー不要） */
 function parseFrontmatter(content) {

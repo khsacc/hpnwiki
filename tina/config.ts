@@ -1,8 +1,9 @@
-import { defineConfig } from 'tinacms'
+import { defineConfig, LocalAuthProvider } from 'tinacms'
 import { UsernamePasswordAuthJSProvider, TinaUserCollection } from 'tinacms-authjs/dist/tinacms'
 
 const isBrowser = typeof window !== 'undefined'
-const isLocal = !isBrowser && (process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI)
+// TINA_PUBLIC_IS_LOCAL はブラウザ側にも bake-in されるため isBrowser の外で評価する
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || (!isBrowser && !process.env.MONGO_URI)
 
 if (!isBrowser) {
   console.error('[tina-build] build env: isBrowser=%s, isLocal=%s, TINA_PUBLIC_IS_LOCAL=%s, MONGO_URI_set=%s',
@@ -20,16 +21,16 @@ if (!isBrowser && !isLocal && !process.env.MONGO_URI) {
 }
 
 function getPageDirectories() {
-  if (isBrowser) return [{ value: '', label: 'トップレベル' }]
+  // value:'' はTinaCMSが自動追加するプレースホルダーと衝突しduplicate key警告になるため除外
+  if (isBrowser) return []
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { readdirSync } = require('fs') as typeof import('fs')
-    const dirs = readdirSync('pages', { withFileTypes: true })
+    return readdirSync('pages', { withFileTypes: true })
       .filter(d => d.isDirectory() && !d.name.startsWith('_') && d.name !== 'api')
       .map(d => ({ value: d.name, label: d.name }))
-    return [{ value: '', label: 'トップレベル' }, ...dirs]
   } catch {
-    return [{ value: '', label: 'トップレベル' }]
+    return []
   }
 }
 
@@ -47,7 +48,7 @@ function slugify(title: string): string {
 export default defineConfig({
   // Tina 管理画面の静的ビルドでも必要なので常に指定する
   contentApiUrlOverride: '/api/tina/gql',
-  ...(isLocal ? {} : { authProvider: new UsernamePasswordAuthJSProvider() }),
+  authProvider: isLocal ? new LocalAuthProvider() : new UsernamePasswordAuthJSProvider(),
   build: {
     publicFolder: 'public',
     outputFolder: 'admin',
@@ -104,6 +105,12 @@ export default defineConfig({
           },
           {
             type: 'string',
+            name: 'lastEditor',
+            label: '最終編集者',
+            ui: { component: null },  // 保存時に API ルートで自動セット
+          },
+          {
+            type: 'string',
             name: 'tags',
             label: 'タグ',
             list: true,
@@ -153,12 +160,10 @@ export default defineConfig({
             },
           },
           router: ({ document }) => {
-            const crumbs = document._sys.breadcrumbs
-            const segments =
-              crumbs[crumbs.length - 1] === 'index'
-                ? crumbs.slice(0, -1)
-                : crumbs
-            return segments.length > 0 ? `/${segments.join('/')}` : '/'
+            // クエリパラメータ(?r=...)はTinaCMSのハッシュルーティングで切り捨てられるためパスで渡す
+            const url = `/tina-preview/${document._sys.relativePath}`
+            console.log('[tina-router] url=%s', url)
+            return url
           },
         },
       },

@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { TinaNodeBackend, LocalBackendAuthProvider } from '@tinacms/datalayer'
 import { AuthJsBackendAuthProvider, TinaAuthJSOptions } from 'tinacms-authjs'
 import * as crypto from 'crypto'
+import { getToken } from 'next-auth/jwt'
 
 async function checkPasswordHash({ saltedHash, password, opts = {} }: { saltedHash: string; password: string; opts?: any }) {
   const DEFAULT_SALT_LENGTH = 32
@@ -132,7 +133,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     bodyQuery: typeof req.body === 'object' && req.body && typeof (req.body as any).query === 'string',
   }))
 
-  // 保存時に更新日を自動セット（GQL mutation で createDoc / updateDoc が来たとき）
+  // 保存時に更新日・最終編集者を自動セット（GQL mutation で createDoc / updateDoc が来たとき）
   if (req.method === 'POST' && req.body) {
     const body = req.body as { query?: string; variables?: { params?: Record<string, unknown> } }
     if (
@@ -141,6 +142,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body.variables?.params
     ) {
       body.variables.params.date = new Date().toISOString()
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+      body.variables.params.lastEditor = (token?.name as string | undefined) || 'Admin'
     }
   }
   try {
