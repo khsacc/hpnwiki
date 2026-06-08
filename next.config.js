@@ -11,7 +11,6 @@ const withNextra = require('nextra')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['tinacms', '@heroicons/react'],
   typescript: {
     ignoreBuildErrors: true,
   },
