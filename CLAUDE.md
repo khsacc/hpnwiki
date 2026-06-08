@@ -80,5 +80,5 @@ See `.env.example`. Key distinction:
 - All wiki pages live in `pages/docs/` as `.mdx` files
 - Nested sections are subdirectories; each subdirectory must have an `index.mdx`
 - `content/docs/` is unused (legacy path from initial setup — ignore it)
-- `content/users/index.json` holds the users array; passwords must be bcrypt hashes
+- `content/users/index.json` holds the users array; password field must be TinaCMS PBKDF2 format: `{ "value": "<salt_hex><key_hex>", "passwordChangeRequired": false }` — salt=32 bytes, key=512 bytes, iterations=25000, digest=sha256. bcrypt strings do NOT work.
 - `__ref__/` contains reference material (old HTML wiki) — not served by Next.js
