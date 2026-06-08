@@ -11,6 +11,13 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Next.js API routes should be forwarded to the Next.js server handler.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/___netlify-server-handler/api/:splat"
+  status = 200
+  force = true
+
 # TinaCMS 管理画面の /admin/* をリダイレクト（ビルド済み静的ファイルへ）
 [[redirects]]
   from = "/admin"
