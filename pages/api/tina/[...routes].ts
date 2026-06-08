@@ -23,6 +23,14 @@ const tinaHandler = TinaNodeBackend({
 })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.error('[tina-debug] request', JSON.stringify({
+    method: req.method,
+    url: req.url,
+    query: req.query,
+    hasBody: !!req.body,
+    bodyQuery: typeof req.body === 'object' && req.body && typeof (req.body as any).query === 'string',
+  }))
+
   // 保存時に更新日を自動セット（GQL mutation で createDoc / updateDoc が来たとき）
   if (req.method === 'POST' && req.body) {
     const body = req.body as { query?: string; variables?: { params?: Record<string, unknown> } }
@@ -41,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const body = req.body as { query?: string; variables?: any }
       if (typeof body.query === 'string' && /\bauthenticate\b/.test(body.query)) {
+        console.error('[tina-debug] authenticate query from request')
         try {
           // request the raw user document via the generated database client
           const dbgQ = `query dbg { user(relativePath: "index.json") { users { username password { value passwordChangeRequired } } } }`
