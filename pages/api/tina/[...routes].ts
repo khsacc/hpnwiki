@@ -1,25 +1,94 @@
+import * as fs from 'fs'
+import * as path from 'path'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { TinaNodeBackend, LocalBackendAuthProvider } from '@tinacms/datalayer'
 import { AuthJsBackendAuthProvider, TinaAuthJSOptions } from 'tinacms-authjs'
+import { checkPasswordHash } from '@tinacms/graphql/dist/index.js'
 import databaseClient from '../../../tina/__generated__/databaseClient'
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
+const USER_JSON_PATH = path.resolve(process.cwd(), 'content', 'users', 'index.json')
 
 console.error('[tina-debug] runtime env: TINA_PUBLIC_IS_LOCAL=%s, MONGO_URI=%s, NEXTAUTH_SECRET=%s',
   process.env.TINA_PUBLIC_IS_LOCAL,
   process.env.MONGO_URI ? '[redacted]' : 'undefined',
   process.env.NEXTAUTH_SECRET ? '[redacted]' : 'undefined')
 
+function loadFallbackUser(username: string) {
+  try {
+    const fileContents = fs.readFileSync(USER_JSON_PATH, 'utf8')
+    const usersJson = JSON.parse(fileContents)
+    return Array.isArray(usersJson.users)
+      ? usersJson.users.find((user: any) => user.username === username)
+      : undefined
+  } catch (error) {
+    console.error('[tina-debug] failed to load fallback users file', USER_JSON_PATH, error)
+    return undefined
+  }
+}
+
+function buildAuthUserResponse(user: any) {
+  return {
+    username: user.username,
+    name: user.name,
+    email: user.email,
+    _password: {
+      passwordChangeRequired: !!user?.password?.passwordChangeRequired,
+    },
+  }
+}
+
+const databaseClientWithFallback = {
+  ...databaseClient,
+  async authenticate({ username, password }: { username: string; password: string }) {
+    try {
+      const result = await databaseClient.authenticate({ username, password })
+      if (result?.data?.authenticate) {
+        return result
+      }
+    } catch (error) {
+      console.error('[tina-debug] database authenticate error', error)
+    }
+
+    const fallbackUser = loadFallbackUser(username)
+    if (fallbackUser && fallbackUser.password && typeof fallbackUser.password.value === 'string') {
+      const matches = await checkPasswordHash({ saltedHash: fallbackUser.password.value, password })
+      if (matches) {
+        console.error('[tina-debug] authenticate fallback succeeded for user', username)
+        return { data: { authenticate: buildAuthUserResponse(fallbackUser) } }
+      }
+    }
+    return { data: { authenticate: null } }
+  },
+  async authorize({ sub }: { sub: string }) {
+    try {
+      const result = await databaseClient.authorize({ sub })
+      if (result?.data?.authorize) {
+        return result
+      }
+    } catch (error) {
+      console.error('[tina-debug] database authorize error', error)
+    }
+
+    const fallbackUser = loadFallbackUser(sub)
+    if (fallbackUser) {
+      console.error('[tina-debug] authorize fallback succeeded for user', sub)
+      return { data: { authorize: buildAuthUserResponse(fallbackUser) } }
+    }
+    return { data: { authorize: null } }
+  },
+}
+
 const tinaHandler = TinaNodeBackend({
   authProvider: isLocal
     ? LocalBackendAuthProvider()
     : AuthJsBackendAuthProvider({
         authOptions: TinaAuthJSOptions({
-          databaseClient,
+          databaseClient: databaseClientWithFallback,
           secret: process.env.NEXTAUTH_SECRET!,
         }),
       }),
-  databaseClient,
+  databaseClient: databaseClientWithFallback,
 })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -53,7 +122,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
           // request the raw user document via the generated database client
           const dbgQ = `query dbg { user(relativePath: "index.json") { users { username password { value passwordChangeRequired } } } }`
-          const dbgRes = await databaseClient.request({ query: dbgQ, variables: {} })
+          const dbgRes = await databaseClient.request({ query: dbgQ, variables: {}, user: undefined })
           const users = dbgRes.data?.user?.users
           if (Array.isArray(users)) {
             const summary = users.map((u: any) => ({
