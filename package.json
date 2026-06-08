@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "node scripts/patch-heroicons.js",
     "dev": "node scripts/generate-meta.mjs && tinacms dev -c \"next dev\"",
-    "build": "node scripts/generate-meta.mjs && tinacms build && next build",
+    "build": "node scripts/patch-heroicons.js && node scripts/generate-meta.mjs && tinacms build && next build",
     "start": "next start",
     "lint": "next lint"
   },
