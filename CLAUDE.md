@@ -39,14 +39,20 @@ Subdirectory labels and order come from that directory's `index.mdx`. Always set
 - `pages/api/tina/[...routes].ts` — Next.js API handler wrapping `TinaNodeBackend`; also the production auth handler (Auth.js / `next-auth` v4)
 - `netlify/functions/tina.ts` — standalone Netlify Function alternative (not used when `@netlify/plugin-nextjs` converts API routes automatically)
 
-**Local vs production mode** is governed by a single flag evaluated in both `tina/config.ts` and `tina/database.ts`:
+**Local vs production mode** is governed by two flags evaluated identically in both `tina/config.ts` and `tina/database.ts`:
 
 ```ts
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
+const isBrowser = typeof window !== 'undefined'
+const isLocal = !isBrowser && (process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI)
 ```
 
-In local mode: no `authProvider`, no `contentApiUrlOverride`, no MongoDB.  
-In production mode: `UsernamePasswordAuthJSProvider`, `contentApiUrlOverride: '/api/tina/gql'`, MongoDB via `mongodb-level`.
+- `isBrowser` guard: TinaCMS config is evaluated in the browser too; all server-only logic (env vars, DB) is skipped there.
+- `isLocal` is `true` when running server-side with `TINA_PUBLIC_IS_LOCAL=true` OR with `MONGO_URI` unset.
+
+In local mode: no `authProvider`, filesystem DB (`createLocalDatabase()`).  
+In production mode: `UsernamePasswordAuthJSProvider`, MongoDB via `mongodb-level` (`createDatabase()`).  
+`contentApiUrlOverride: '/api/tina/gql'` is **always set** (required for the statically-built admin UI in both modes).  
+Missing `MONGO_URI` in production mode (server-side, non-browser) throws immediately at startup.
 
 ### Data flow (production)
 
