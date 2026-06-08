@@ -10,18 +10,21 @@ if (!isBrowser && !isLocal && !process.env.MONGO_URI) {
   )
 }
 
-// 新しいセクションを追加したらここにも追記する
-const PAGE_DIRECTORIES = [
-  { value: '',                                    label: 'トップレベル' },
-  { value: 'references',                         label: '参考文献' },
-  { value: 'documents',                          label: 'ドキュメント' },
-  { value: 'documents/datacorrection',           label: 'ドキュメント > データ補正' },
-  { value: 'att-data-resources',                 label: 'Attenuation Coefficient データリソース' },
-  { value: 'cellassembly',                       label: 'セルアセンブリ' },
-  { value: 'sample-att',                         label: 'サンプル吸収補正' },
-  { value: 'tof-profile-functions',              label: 'TOFプロファイル関数' },
-  { value: 'tof-profile-functions/bl11-pulse-shape', label: 'TOFプロファイル関数 > BL11パルス形状' },
-]
+function getPageDirectories() {
+  if (isBrowser) return [{ value: '', label: 'トップレベル' }]
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { readdirSync } = require('fs') as typeof import('fs')
+    const dirs = readdirSync('pages', { withFileTypes: true })
+      .filter(d => d.isDirectory() && !d.name.startsWith('_') && d.name !== 'api')
+      .map(d => ({ value: d.name, label: d.name }))
+    return [{ value: '', label: 'トップレベル' }, ...dirs]
+  } catch {
+    return [{ value: '', label: 'トップレベル' }]
+  }
+}
+
+const PAGE_DIRECTORIES = getPageDirectories()
 
 function slugify(title: string): string {
   return (title || 'untitled')
@@ -69,6 +72,15 @@ export default defineConfig({
             name: 'pageDirectory',
             label: '格納先（新規作成時に選択）',
             options: PAGE_DIRECTORIES,
+          },
+          {
+            // 新規セクション作成時のみ使用。既存セクションへの追加は上の「格納先」を使う。
+            type: 'string',
+            name: 'newSectionName',
+            label: '新規セクション名（新セクション作成時のみ入力）',
+            ui: {
+              description: '新しいセクションを作る場合のみ英数字で入力（例: my-section）。上の「格納先」より優先されます。',
+            },
           },
           {
             type: 'number',
@@ -124,7 +136,9 @@ export default defineConfig({
           filename: {
             readonly: false,
             slugify: (values) => {
-              const dir = (values.pageDirectory as string | undefined) ?? ''
+              const dir = (values.newSectionName as string | undefined)?.trim()
+                || (values.pageDirectory as string | undefined)
+                || ''
               const slug = slugify(values.title as string)
               return dir ? `${dir}/${slug}` : slug
             },
