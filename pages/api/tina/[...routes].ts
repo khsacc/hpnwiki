@@ -3,7 +3,12 @@ import { TinaNodeBackend, LocalBackendAuthProvider } from '@tinacms/datalayer'
 import { AuthJsBackendAuthProvider, TinaAuthJSOptions } from 'tinacms-authjs'
 import databaseClient from '../../../tina/__generated__/databaseClient'
 
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
+
+console.error('[tina-debug] runtime env: TINA_PUBLIC_IS_LOCAL=%s, MONGO_URI=%s, NEXTAUTH_SECRET=%s',
+  process.env.TINA_PUBLIC_IS_LOCAL,
+  process.env.MONGO_URI ? '[redacted]' : 'undefined',
+  process.env.NEXTAUTH_SECRET ? '[redacted]' : 'undefined')
 
 const tinaHandler = TinaNodeBackend({
   authProvider: isLocal
