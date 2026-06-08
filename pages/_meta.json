@@ -2,7 +2,7 @@
   "index": "Neutron @ Pressure Wiki",
   "references": "参考文献",
   "documents": "ドキュメント",
-  "att-data-resources": "減弱係数データリソース",
+  "att-data-resources": "Attenuation Coefficient データリソース",
   "cellassembly": "セルアセンブリ（Cell Att.）",
   "sample-att": "サンプル吸収補正（Sample Att.）",
   "tof-profile-functions": "TOFプロファイル関数"
