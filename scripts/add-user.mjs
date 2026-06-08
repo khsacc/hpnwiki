@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Usage:
- *   node scripts/add-user.mjs <username> <name> <email> <password>
+ *   node scripts/add-user.mjs <username> <name> <password>
  *
  * Adds a new user to content/users/index.json with a bcrypt-hashed password.
  */
@@ -58,14 +58,13 @@ async function promptHidden(question) {
 async function main() {
   const bcrypt = loadBcrypt();
 
-  let [username, name, email, password] = process.argv.slice(2);
+  let [username, name, password] = process.argv.slice(2);
 
   if (!username) username = await prompt('ユーザー名: ');
   if (!name)     name     = await prompt('表示名: ');
-  if (!email)    email    = await prompt('メールアドレス: ');
   if (!password) password = await promptHidden('パスワード: ');
 
-  if (!username || !name || !email || !password) {
+  if (!username || !name || !password) {
     console.error('エラー: すべてのフィールドが必要です。');
     process.exit(1);
   }
@@ -78,7 +77,7 @@ async function main() {
   }
 
   const hashed = await bcrypt.hash(password, 10);
-  data.users.push({ username, name, email, password: hashed });
+  data.users.push({ username, name, password: hashed });
 
   writeFileSync(USERS_FILE, JSON.stringify(data, null, 2) + '\n', 'utf8');
   console.log(`ユーザー "${username}" を追加しました。`);

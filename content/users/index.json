@@ -3,19 +3,16 @@
     {
       "username": "khsacc",
       "name": "Hiroki Kobayashi",
-      "email": "hero.key629522@gmail.com",
       "password": "$2b$10$0o723c6m2XmzWl10hc/3pupgE.Bo4fM2xfLYcXnP.jpijOx0.iSAK"
     },
     {
       "username": "kom",
       "name": "Kazuki Komatsu",
-      "email": "kom@eqchem.s.u-tokyo.ac.jp",
       "password": "$2b$10$5RZBtNCDJdVGfPgWOjXKMeSOdTVLGqQLiODLEfCEqq2De1JjrMcpe"
     },
     {
       "username": "admin",
       "name": "Admin",
-      "email": "hero.key629522@gmail.com",
       "password": "$2b$10$oTeF3sXZDGEBZmXBiOh55OJyBp4wrEUPaC4utOwJ0nv8n0/avrIcm"
     }
   ]
