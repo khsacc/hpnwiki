@@ -1,8 +1,13 @@
 import { defineConfig } from 'tinacms'
 import { UsernamePasswordAuthJSProvider, TinaUserCollection } from 'tinacms-authjs/dist/tinacms'
 
-const isLocal =
-  process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
+
+if (!isLocal && !process.env.MONGO_URI) {
+  throw new Error(
+    'TinaCMS production mode requires MONGO_URI. Set TINA_PUBLIC_IS_LOCAL=true for local development.'
+  )
+}
 
 // 新しいセクションを追加したらここにも追記する
 const PAGE_DIRECTORIES = [
@@ -27,11 +32,9 @@ function slugify(title: string): string {
 }
 
 export default defineConfig({
-  // ローカル開発時は authProvider・contentApiUrlOverride を省略
-  ...(!isLocal && {
-    contentApiUrlOverride: '/api/tina/gql',
-    authProvider: new UsernamePasswordAuthJSProvider(),
-  }),
+  // Tina 管理画面の静的ビルドでも必要なので常に指定する
+  contentApiUrlOverride: '/api/tina/gql',
+  ...(isLocal ? {} : { authProvider: new UsernamePasswordAuthJSProvider() }),
   build: {
     publicFolder: 'public',
     outputFolder: 'admin',

@@ -2,8 +2,13 @@ import { createDatabase, createLocalDatabase } from '@tinacms/datalayer'
 import { MongodbLevel } from 'mongodb-level'
 import { GitHubProvider } from 'tinacms-gitprovider-github'
 
-const isLocal =
-  process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
+
+if (!isLocal && !process.env.MONGO_URI) {
+  throw new Error(
+    'TinaCMS production mode requires MONGO_URI. Set TINA_PUBLIC_IS_LOCAL=true for local development.'
+  )
+}
 
 // MDX ファイルを書き込む際に date を現在時刻に自動更新する
 function withAutoDate<T extends { put: (...args: any[]) => Promise<any> }>(db: T): T {
