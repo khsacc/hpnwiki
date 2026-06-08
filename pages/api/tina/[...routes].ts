@@ -3,7 +3,39 @@ import * as path from 'path'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { TinaNodeBackend, LocalBackendAuthProvider } from '@tinacms/datalayer'
 import { AuthJsBackendAuthProvider, TinaAuthJSOptions } from 'tinacms-authjs'
-import { checkPasswordHash } from '@tinacms/graphql/dist/index.js'
+import * as crypto from 'crypto'
+
+async function checkPasswordHash({ saltedHash, password, opts = {} }: { saltedHash: string; password: string; opts?: any }) {
+  const DEFAULT_SALT_LENGTH = 32
+  const DEFAULT_KEY_LENGTH = 512
+  const DEFAULT_ITERATIONS = 25000
+  const DEFAULT_DIGEST = 'sha256'
+  const {
+    saltLength = DEFAULT_SALT_LENGTH,
+    keyLength = DEFAULT_KEY_LENGTH,
+    iterations = DEFAULT_ITERATIONS,
+    digest = DEFAULT_DIGEST,
+  } = opts || {}
+
+  if (!saltedHash || typeof saltedHash !== 'string') return false
+  const salt = saltedHash.slice(0, saltLength * 2)
+  const hash = saltedHash.slice(saltLength * 2)
+  try {
+    const derived = await new Promise<Buffer>((resolve, reject) => {
+      crypto.pbkdf2(password, salt, iterations, keyLength, digest, (err, derivedKey) => {
+        if (err) return reject(err)
+        resolve(derivedKey)
+      })
+    })
+    const expected = Buffer.from(hash, 'hex')
+    if (derived.length === expected.length && crypto.timingSafeEqual(derived, expected)) {
+      return true
+    }
+  } catch (e) {
+    return false
+  }
+  return false
+}
 import databaseClient from '../../../tina/__generated__/databaseClient'
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
