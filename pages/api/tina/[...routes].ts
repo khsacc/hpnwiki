@@ -61,7 +61,7 @@ function loadFallbackUser(username: string) {
 
 function buildAuthUserResponse(user: any) {
   return {
-    username: user.username,
+    id: user.username,  // next-auth uses 'id' to set jwt.sub; must NOT be 'username'
     name: user.name,
     email: user.email,
     _password: {
