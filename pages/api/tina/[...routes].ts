@@ -30,6 +30,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
   try {
+    // Debug helper: if an authenticate GraphQL request is received, fetch
+    // the raw users document from the Tina database and log a compact
+    // summary to help diagnose missing password fields at runtime.
+    try {
+      const body = req.body as { query?: string; variables?: any }
+      if (typeof body.query === 'string' && /\bauthenticate\b/.test(body.query)) {
+        try {
+          // request the raw user document via the generated database client
+          const dbgQ = `query dbg { user(relativePath: "index.json") { users { username password { value passwordChangeRequired } } } }`
+          const dbgRes = await databaseClient.request({ query: dbgQ, variables: {} })
+          const users = dbgRes.data?.user?.users
+          if (Array.isArray(users)) {
+            const summary = users.map((u: any) => ({
+              username: u.username,
+              hasPasswordObject: !!(u.password && typeof u.password === 'object'),
+              hasPasswordValue: !!(u.password && typeof u.password === 'object' && !!u.password.value),
+              passwordValuePreview: u.password && u.password.value ? String(u.password.value).slice(0, 8) + '...' : null,
+            }))
+            console.error('[tina-debug] users summary:', JSON.stringify(summary))
+          } else {
+            console.error('[tina-debug] users not found or not an array:', String(users))
+          }
+        } catch (e) {
+          console.error('[tina-debug] failed to fetch users doc for debug:', e)
+        }
+      }
+    } catch (e) {
+      console.error('[tina-debug] debug-helper failure:', e)
+    }
     return await tinaHandler(req, res)
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)

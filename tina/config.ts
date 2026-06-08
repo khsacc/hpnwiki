@@ -2,7 +2,7 @@ import { defineConfig } from 'tinacms'
 import { UsernamePasswordAuthJSProvider, TinaUserCollection } from 'tinacms-authjs/dist/tinacms'
 
 const isBrowser = typeof window !== 'undefined'
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true' || !process.env.MONGO_URI
 
 if (!isBrowser && !isLocal && !process.env.MONGO_URI) {
   throw new Error(
